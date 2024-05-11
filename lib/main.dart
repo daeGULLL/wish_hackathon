@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'dart:async';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const MyApp());
 }
 
@@ -28,16 +32,17 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        fontFamily: "Pretendard",
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xC7BDB6FF)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -48,25 +53,18 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  @override
+  void initState(){
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () async {
+      FlutterNativeSplash.remove();
+    });}
 
   @override
   Widget build(BuildContext context) {
@@ -74,52 +72,155 @@ class _MyHomePageState extends State<MyHomePage> {
     // by the _incrementCounter method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
+    final double AppWidth=MediaQuery.of(context).size.width;
+    final double AppHeight = MediaQuery.of(context).size.height;
+    return WillPopScope(onWillPop: ()async{return await showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(actionsPadding: EdgeInsets.zero,actionsAlignment: MainAxisAlignment.spaceEvenly,contentPadding: const EdgeInsets.only(top:40,bottom:30),
+          content:const Text('앱을 종료하시겠습니까?',textAlign: TextAlign.center,softWrap: true,),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('확인'),
+            ),
+          ]);});}, child:Scaffold(backgroundColor: const Color(0xffE8E8E8),
+      body: SingleChildScrollView(physics:const ClampingScrollPhysics(),child: SizedBox(width:AppWidth,child:Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
+            SizedBox(height:AppHeight*0.03),
+            Image.asset('images/home_logo.png',height: AppHeight*0.11,width: AppHeight*0.11),
+            SizedBox(height:AppHeight*0.03),
             const Text(
-              'You have pushed the button this many times:',
+              'Li+mind와 함께해요!',style: TextStyle(fontWeight: FontWeight.w200, fontSize: 20),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            SizedBox(height:AppHeight*0.09),
+            Image.asset('images/home_rabbit.png',height: AppHeight*0.31),
+            SizedBox(height:AppHeight*0.1),
+            const Text(
+              '시작하기 전에\n당신에 대해서 알려주세요!',textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+              //Theme.of(context).textTheme.headlineMedium,
             ),
+            SizedBox(height:AppHeight*0.16),
+            TextButton(
+              style: TextButton.styleFrom(fixedSize:Size(AppWidth*0.71, AppHeight*0.06), //padding:EdgeInsets.symmetric(vertical: AppHeight*0.02),
+                  foregroundColor: Colors.white, backgroundColor: const Color(0xff0A6847),
+                  shape:RoundedRectangleBorder(side:const BorderSide(color: Color(0xff0A6847)),
+                      borderRadius: BorderRadius.circular(100)),
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)
+                  ),
+              onPressed: () {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => survey()));
+    },
+              child: const Text('LET\'S GO →'),
+            ),SizedBox(height:AppHeight*0.07)
           ],
-        ),
+        )),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+
+    ));
   }
 }
+
+class survey extends StatefulWidget {
+  const survey({super.key});
+
+  @override
+  State<survey> createState() => _surveyState();
+}
+
+class _surveyState extends State<survey> {
+  late PageController _pageViewController;
+  int _currentPageIndex = 0;
+  var Qt=['1. 직업', '2. 사용 목적', '목표를 정해주세요.'];
+  var Q=[['학생','대학(원)생','직장인','프리랜서','무직','기타'],
+    ['규칙적인 생활', '일상 기록', '일상 분석', '목표 달성', '생산적인 삶', '기타'],
+    ['규칙적인 식습관 가지기','충분한 수면하기','자기 계발 시간 늘리기', '    +']
+  ];
+  var R=[[0xffFFFFFF,0xffFFFFFF,0xffFFFFFF,0xffFFFFFF,0xffFFFFFF,0xffFFFFFF],
+    [0xffFFFFFF,0xffFFFFFF,0xffFFFFFF,0xffFFFFFF,0xffFFFFFF,0xffFFFFFF],
+  [0xffFFFFFF,0xffFFFFFF,0xffFFFFFF,0xffFFFFFF]
+  ];
+  String selected_s = "";
+  bool selected=false;
+  bool complete=false;
+  @override
+  void initState() {
+    super.initState();
+    _pageViewController = PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageViewController.dispose();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final double AppWidth=MediaQuery.of(context).size.width;
+    final double AppHeight = MediaQuery.of(context).size.height;
+    return Scaffold(backgroundColor: const Color(0xffE8E8E8),
+      appBar: AppBar(backgroundColor:const Color(0xffE8E8E8),
+        automaticallyImplyLeading: false,title:const Text('Li + mind'),actions: null,
+        titleTextStyle: TextStyle(fontWeight: FontWeight.w200, fontSize: 20),),
+    body: Column(crossAxisAlignment:CrossAxisAlignment.start,
+      //alignment: Alignment.bottomCenter,
+      children: <Widget>[
+        const Text('    당신에 대해 알려주세요!', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
+        SizedBox(height: AppHeight*0.09),
+        SizedBox(height:AppHeight*0.6,width:AppWidth,child:PageView.builder(
+          /// [PageView.scrollDirection] defaults to [Axis.horizontal].
+          /// Use [Axis.vertical] to scroll vertically.
+          physics: NeverScrollableScrollPhysics(),
+          controller: _pageViewController,
+          itemCount: 3,
+          itemBuilder: (c,ir){
+            return Padding(padding: EdgeInsets.symmetric(horizontal: 10),child:Column(mainAxisAlignment:MainAxisAlignment.center,crossAxisAlignment:CrossAxisAlignment.start,children: [
+              Text('  ${Qt[ir]}', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w300),),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: Q[ir].length,
+                itemBuilder: (c, i){
+                  return Padding(padding:EdgeInsets.symmetric(vertical:10, horizontal: 30),child:TextButton(
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                      foregroundColor: Colors.black,
+                      backgroundColor: Color(R[ir][i]),
+                    ),
+                    onPressed: selected==true&&R[ir][i]==0xffFFFFFF? null : (){
+                      setState(() {
+                        R[ir][i]==0xffFFFFFF?R[ir][i]=0xffB5BCC3:R[ir][i]=0xffFFFFFF;
+                        selected=!selected;
+                        selected_s=Q[ir][i];
+                      });
+                    },child:Text(Q[ir][i])));
+                },
+              ),
+            ]));
+          },
+        )),
+        SizedBox(height: AppHeight*0.1),
+        Container(alignment:Alignment.bottomRight,padding:const EdgeInsets.symmetric(horizontal: 10),
+            child:complete?TextButton(style: TextButton.styleFrom(fixedSize:Size(AppWidth*0.06, AppHeight*0.06), //padding:EdgeInsets.symmetric(vertical: AppHeight*0.02),
+                foregroundColor: Colors.white, backgroundColor: const Color(0xff0A6847),
+                shape:RoundedRectangleBorder(side:const BorderSide(color: Color(0xff0A6847)),
+                    borderRadius: BorderRadius.circular(100)),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)
+            ),onPressed: (){
+
+            }, child: const Text('완료')) : IconButton(onPressed: selected?(){setState(() {
+              _currentPageIndex<3?_currentPageIndex++ : null;
+              selected=false;
+              if(_currentPageIndex==2)complete=true;
+              _pageViewController.jumpToPage(_currentPageIndex);
+            });
+            }:null, icon: const Icon(Icons.arrow_forward_ios_rounded)))]
+    ));
+  }
+}
+
