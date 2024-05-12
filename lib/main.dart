@@ -150,6 +150,7 @@ class _surveyState extends State<survey> {
   String selected_s = "";
   bool selected=false;
   bool complete=false;
+  bool endPage=false;
   @override
   void initState() {
     super.initState();
@@ -171,17 +172,14 @@ class _surveyState extends State<survey> {
       appBar: AppBar(backgroundColor:const Color(0xffE8E8E8),
         automaticallyImplyLeading: false,title:const Text('Li + mind'),actions: null,
         titleTextStyle: TextStyle(fontWeight: FontWeight.w200, fontSize: 20),),
-    body: complete?FutureBuilder(
-        future: Future.delayed(const Duration(seconds: 2)),
+    body: endPage?FutureBuilder(
+        future: Future.delayed(const Duration(seconds: 2),()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>CalendarScreen()))),
     builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.done) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>CalendarScreen()));
-    return Container();
-    } else {
-    return Center(child:Column(mainAxisAlignment:MainAxisAlignment.center,children: [Image.asset(height:AppHeight*0.37,'images/end_rabbit.png'),Text('수고하셨어요!\n',textAlign: TextAlign.center,
+    return Center(child:Column(mainAxisAlignment:MainAxisAlignment.center,
+      children: [Image.asset(height:AppHeight*0.37,'images/end_rabbit.png'),Text('수고하셨어요!\n',textAlign: TextAlign.center,
     style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25),),Text('답변을 토대로',textAlign: TextAlign.center,
       style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25),),Text('데이터 정리중입니다.',textAlign: TextAlign.center,
-        style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25),),const SizedBox(height:20)],));}}):Column(crossAxisAlignment:CrossAxisAlignment.start,
+        style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25),),const SizedBox(height:20)],));}):Column(crossAxisAlignment:CrossAxisAlignment.start,
       //alignment: Alignment.bottomCenter,
       children: <Widget>[
         const Text('    당신에 대해 알려주세요!', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
@@ -225,8 +223,11 @@ class _surveyState extends State<survey> {
                     borderRadius: BorderRadius.circular(100)),
                 textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)
             ),onPressed: (){
-
-            }, child: const Text('완료')) : IconButton(onPressed: selected?(){setState(() {
+             setState(() {
+               endPage=true;
+             });
+            }, child: const Text('완료')) : IconButton(onPressed: selected?(){
+              setState(() {
               _currentPageIndex<3?_currentPageIndex++ : null;
               selected=false;
               if(_currentPageIndex==2)complete=true;
@@ -251,7 +252,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(automaticallyImplyLeading: false,
         title: const Text('Li + Mind'),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center,children:[
