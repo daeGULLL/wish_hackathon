@@ -94,13 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height:AppHeight*0.03),
-            Image.asset('images/home_logo.png',height: AppHeight*0.11,width: AppHeight*0.11),
+            Image.asset('assets/images/home_logo.png',height: AppHeight*0.11,width: AppHeight*0.11),
             SizedBox(height:AppHeight*0.03),
             const Text(
               'Li+mind와 함께해요!',style: TextStyle(fontWeight: FontWeight.w200, fontSize: 20),
             ),
             SizedBox(height:AppHeight*0.09),
-            Image.asset('images/home_rabbit.png',height: AppHeight*0.31),
+            Image.asset('assets/images/home_rabbit.png',height: AppHeight*0.31),
             SizedBox(height:AppHeight*0.1),
             const Text(
               '시작하기 전에\n당신에 대해서 알려주세요!',textAlign: TextAlign.center,
@@ -176,7 +176,7 @@ class _surveyState extends State<survey> {
         future: Future.delayed(const Duration(seconds: 2),()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>CalendarScreen()))),
     builder: (context, snapshot) {
     return Center(child:Column(mainAxisAlignment:MainAxisAlignment.center,
-      children: [Image.asset(height:AppHeight*0.37,'images/end_rabbit.png'),Text('수고하셨어요!\n',textAlign: TextAlign.center,
+      children: [Image.asset(height:AppHeight*0.37,'assets/images/end_rabbit.png'),Text('수고하셨어요!\n',textAlign: TextAlign.center,
     style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25),),Text('답변을 토대로',textAlign: TextAlign.center,
       style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25),),Text('데이터 정리중입니다.',textAlign: TextAlign.center,
         style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25),),const SizedBox(height:20)],));}):Column(crossAxisAlignment:CrossAxisAlignment.start,

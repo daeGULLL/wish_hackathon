@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
 
   table_calendar: ^3.1.1
   percent_indicator: ^4.2.3
@@ -54,8 +53,13 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+
   assets:
-    - assets/images/
+    - assets/images/end_rabbit.png
+    - assets/images/home_logo.png
+    - assets/images/home_rabbit.png
+    - assets/images/splash.png
+
   fonts:
     - family: Pretendard
       fonts:
