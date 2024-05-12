@@ -252,7 +252,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false,
+      appBar: AppBar(
         title: const Text('Li + Mind'),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center,children:[
